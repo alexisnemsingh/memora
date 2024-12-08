@@ -44,4 +44,10 @@ class FlashcardManager: ObservableObject {
             albums[index].flashcards.append(newFlashcard)
         }
     }
+    
+    func deleteAlbum(_ album: Album) {
+        if let index = albums.firstIndex(where: { $0.id == album.id }) {
+            albums.remove(at: index)
+        }
+    }
 }
