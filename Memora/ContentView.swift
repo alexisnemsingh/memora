@@ -1,8 +1,13 @@
 import SwiftUI
 import PhotosUI
 
+// Maybe move CreateFlashcardView and ImagePicker to own files?
+
 struct ContentView: View {
     @State private var isAddCardSheetPresented = false
+    @StateObject private var manager = FlashcardManager()
+    // temporary variable for album. Need to put create album on separate page
+    @State private var myAlbum = Album(id: UUID(), title: "My Album", flashcards: [])
     
     var body: some View {
         VStack {
@@ -20,21 +25,30 @@ struct ContentView: View {
                     .frame(width: 100, height: 100)
                     .foregroundColor(.blue)
             }
-            
+            // Change to add album
             Text("Add Flashcards")
                 .font(.title2)
                 .padding(.top, 10)
             
+            // List Albums
+            
             Spacer()
         }
+        // switch to "AlbumView" Instead
         .sheet(isPresented: $isAddCardSheetPresented) {
-            CreateFlashcardView()
+            // before you add album:
+            // CreateFlashcardView(manager: manager, albumId: myAlbum.id)
+            // once you've added an album, use test:
+            CreateFlashcardView(manager: manager, albumId: manager.albums[0].id)
         }
     }
 }
 
 struct CreateFlashcardView: View {
+    @ObservedObject var manager: FlashcardManager
+    var albumId: UUID
     @Environment(\.dismiss) private var dismiss
+    
     @State private var frontText = ""
     @State private var backText = ""
     @State private var frontImage: UIImage?
@@ -84,7 +98,14 @@ struct CreateFlashcardView: View {
                     }
                     
                     Button("Save Flashcard") {
-                        // Save logic here
+                        let frontImageData = frontImage?.jpegData(compressionQuality: 0.8)
+                        let backImageData = backImage?.jpegData(compressionQuality: 0.8)
+                        manager.addFlashcard(to: albumId, question: frontText, answer: backText, frontImage: frontImageData, backImage: backImageData)
+                        print(manager.albums[0].flashcards)
+                        // to add album, uncomment:
+                        // manager.addAlbum(title: "test album")
+                        print("card saved")
+                        
                         dismiss()
                     }
                     .buttonStyle(.borderedProminent)
