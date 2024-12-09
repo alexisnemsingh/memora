@@ -36,11 +36,13 @@ struct AlbumView: View {
             
             List {
                 ForEach(manager.albums.first { $0.id == albumId }?.flashcards ?? []) { flashcard in
-                    VStack(alignment: .leading) {
-                        Text(flashcard.question)
-                            .font(.headline)
-                        Text(flashcard.answer)
-                            .font(.subheadline)
+                    NavigationLink(destination: FlashcardView(flashcard: flashcard, manager: manager)) {
+                        VStack(alignment: .leading) {
+                            Text(flashcard.question)
+                                .font(.headline)
+                            Text(flashcard.answer)
+                                .font(.subheadline)
+                        }
                     }
                 }
             }
@@ -71,4 +73,3 @@ struct AlbumView: View {
         }
     }
 }
-

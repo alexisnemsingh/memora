@@ -50,4 +50,13 @@ class FlashcardManager: ObservableObject {
             albums.remove(at: index)
         }
     }
+    
+    func deleteFlashcard(_ flashcard: Flashcard) {
+        for (albumIndex, album) in albums.enumerated() {
+            if let flashcardIndex = album.flashcards.firstIndex(where: { $0.id == flashcard.id }) {
+                albums[albumIndex].flashcards.remove(at: flashcardIndex)
+                break
+            }
+        }
+    }
 }
