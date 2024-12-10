@@ -3,23 +3,24 @@
 //  Memora
 //
 //  Created by Angel Lyn Cervantes on 12/7/24.
-//
+//  Updated by Bryant Martinez, added Darkmode on 12/9/24
 
 import SwiftUI
 
 struct AlbumView: View {
     @State private var isAddCardSheetPresented = false
-    @State private var showQuizAlert = false
-    @State private var showDeleteAlert = false
+    @State private var showAlert = false
     @State private var isQuizActivated = false
     @ObservedObject var manager: FlashcardManager
     var albumId: UUID
-    
+    @EnvironmentObject var themeManager: ThemeManager // Use the custom theme manager
+
     var body: some View {
         VStack {
             Text("Viewing Album")
                 .font(.largeTitle)
                 .padding(.top, 50)
+                .foregroundColor(themeManager.isDarkMode ? .white : .black) // Use themeManager for dark mode
             
             Spacer()
             
@@ -29,28 +30,13 @@ struct AlbumView: View {
                 Image(systemName: "plus.circle.fill")
                     .resizable()
                     .frame(width: 100, height: 100)
-                    .foregroundColor(.blue)
+                    .foregroundColor(themeManager.isDarkMode ? .white : .blue) // Button color based on theme
             }
             
             Text("Add Flashcards")
                 .font(.title2)
                 .padding(.top, 10)
-            
-            NavigationLink(destination: FlashcardReviewView(manager: manager, albumId: albumId))
-            {
-                HStack {
-                    Image(systemName: "clock")
-                        .resizable()
-                        .frame(width: 20, height: 20)
-                    Text("Start Timed Review")
-                }
-                .padding()
-                .background(Color.green)
-                .foregroundColor(.white)
-                .cornerRadius(10)
-            }
-            .disabled(manager.albums.first { $0.id == albumId }?.flashcards.isEmpty ?? true)
-            .padding(.bottom)
+                .foregroundColor(themeManager.isDarkMode ? .white : .black) // Text color for light/dark mode
             
             List {
                 ForEach(manager.albums.first { $0.id == albumId }?.flashcards ?? []) { flashcard in
@@ -58,36 +44,41 @@ struct AlbumView: View {
                         VStack(alignment: .leading) {
                             Text(flashcard.question)
                                 .font(.headline)
+                                .foregroundColor(themeManager.isDarkMode ? .black : .blue) // Question text color
                             Text(flashcard.answer)
                                 .font(.subheadline)
+                                .foregroundColor(themeManager.isDarkMode ? .black : .blue) // Answer text color
                         }
                     }
                 }
             }
+            .background(themeManager.isDarkMode ? Color.black.opacity(0.8) : Color.white) // List background color
+            .listRowBackground(themeManager.isDarkMode ? Color.gray.opacity(0.4) : Color.white) // List row background color
             
             Spacer()
             
             HStack {
                 Spacer()
                 
-                if (manager.albums.first { $0.id == albumId }?.flashcards != nil && manager.albums.first { $0.id == albumId }?.flashcards.count != 0) {
+                // Quiz Me! Button
+                if let flashcards = manager.albums.first(where: { $0.id == albumId })?.flashcards, flashcards.count > 0 {
                     NavigationLink(
                         "Quiz Me!",
-                        destination:
-                            QuizView(
-                                manager: manager,
-                                albumId: albumId,
-                                cardId: 0,
-                                count: manager.albums.first { $0.id == albumId }!.flashcards.count)
+                        destination: QuizView(
+                            manager: manager,
+                            albumId: albumId,
+                            cardId: 0,
+                            count: flashcards.count
+                        )
                     )
                 } else {
                     Button(action: {
-                        showQuizAlert = true
+                        showAlert = true
                     }) {
                         Text("Quiz Me")
-                            .foregroundColor(.black)
+                            .foregroundColor(themeManager.isDarkMode ? .white : .black) // Button text color
                     }
-                    .alert(isPresented: $showQuizAlert) {
+                    .alert(isPresented: $showAlert) {
                         Alert(
                             title: Text("No Flashcards"),
                             message: Text("You cannot run a quiz. There are no flashcards in this album.")
@@ -96,14 +87,38 @@ struct AlbumView: View {
                 }
                 
                 Spacer()
+
+                // Start Timer Review Button
+                if let flashcards = manager.albums.first(where: { $0.id == albumId })?.flashcards, flashcards.count > 0 {
+                    NavigationLink(
+                        "Start Timer Review",
+                        destination: FlashcardReviewView(manager: manager, albumId: albumId)
+                    )
+                } else {
+                    Button(action: {
+                        showAlert = true
+                    }) {
+                        Text("Start Timer Review")
+                            .foregroundColor(themeManager.isDarkMode ? .white : .black) // Button text color
+                    }
+                    .alert(isPresented: $showAlert) {
+                        Alert(
+                            title: Text("No Flashcards"),
+                            message: Text("You cannot start the timer review. There are no flashcards in this album.")
+                        )
+                    }
+                }
+
+                Spacer()
                 
+                // Delete Album Button
                 Button(action: {
-                    showDeleteAlert = true
+                    showAlert = true
                 }) {
                     Text("Delete Album")
-                        .foregroundColor(.red)
+                        .foregroundColor(.red) // Delete button is always red
                 }
-                .alert(isPresented: $showDeleteAlert) {
+                .alert(isPresented: $showAlert) {
                     Alert(
                         title: Text("Delete Album"),
                         message: Text("Are you sure you want to delete this album?"),
@@ -117,16 +132,17 @@ struct AlbumView: View {
                 }
                 
                 Spacer()
-                
             }
-            
         }
+        .padding()
+        .background(themeManager.isDarkMode ? Color.black.opacity(0.8): Color.white) // Overall background color
+        .foregroundColor(themeManager.isDarkMode ? .white : .black) // Default text color based on theme
         .sheet(isPresented: $isAddCardSheetPresented) {
             CreateFlashcardView(manager: manager, albumId: albumId)
         }
         .sheet(isPresented: $isQuizActivated) {
             if (manager.albums.first { $0.id == albumId }?.flashcards.count ?? 0 ) > 0 {
-                
+                // Add the logic for quiz sheet if needed
             }
         }
     }
