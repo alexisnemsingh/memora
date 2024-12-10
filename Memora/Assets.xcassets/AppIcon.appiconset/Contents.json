@@ -1,6 +1,7 @@
 {
   "images" : [
     {
+      "filename" : "Memora 3.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -12,6 +13,7 @@
           "value" : "dark"
         }
       ],
+      "filename" : "Memora 4.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -23,6 +25,7 @@
           "value" : "tinted"
         }
       ],
+      "filename" : "Memora 5.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
