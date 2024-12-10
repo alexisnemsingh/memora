@@ -8,19 +8,20 @@
 import SwiftUI
 import UIKit
 
-struct AlbumDetailView: View {
-    @ObservedObject var manager: FlashcardManager
-    let album: Album // Assuming you have an Album model
-
-    var body: some View {
-        NavigationView {
-            VStack {
-                // Other album details
-                NavigationLink(destination: FlashcardReviewView(manager: manager, albumId: album.id)) {
-                    Text("Start Review")
-                        .buttonStyle(.borderedProminent)
-                }
-            }
+struct FlashcardReviewView_Previews: PreviewProvider {
+    static var previews: some View {
+        let manager = FlashcardManager()
+        let album = Album(
+            id: UUID(),
+            title: "Sample Album",
+            flashcards: [
+                Flashcard(question: "What is SwiftUI?", answer: "A UI framework by Apple")
+            ]
+        )
+        manager.albums.append(album)
+        return NavigationView {
+            FlashcardReviewView(manager: manager, albumId: album.id)
         }
     }
 }
+
