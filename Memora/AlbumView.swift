@@ -9,7 +9,8 @@ import SwiftUI
 
 struct AlbumView: View {
     @State private var isAddCardSheetPresented = false
-    @State private var showAlert = false
+    @State private var showQuizAlert = false
+    @State private var showDeleteAlert = false
     @State private var isQuizActivated = false
     @ObservedObject var manager: FlashcardManager
     var albumId: UUID
@@ -81,15 +82,15 @@ struct AlbumView: View {
                     )
                 } else {
                     Button(action: {
-                        showAlert = true
+                        showQuizAlert = true
                     }) {
                         Text("Quiz Me")
                             .foregroundColor(.black)
                     }
-                    .alert(isPresented: $showAlert) {
+                    .alert(isPresented: $showQuizAlert) {
                         Alert(
                             title: Text("No Flashcards"),
-                            message: Text("You cannot run a quiz. There are flashcards in this album.")
+                            message: Text("You cannot run a quiz. There are no flashcards in this album.")
                         )
                     }
                 }
@@ -97,12 +98,12 @@ struct AlbumView: View {
                 Spacer()
                 
                 Button(action: {
-                    showAlert = true
+                    showDeleteAlert = true
                 }) {
                     Text("Delete Album")
                         .foregroundColor(.red)
                 }
-                .alert(isPresented: $showAlert) {
+                .alert(isPresented: $showDeleteAlert) {
                     Alert(
                         title: Text("Delete Album"),
                         message: Text("Are you sure you want to delete this album?"),
