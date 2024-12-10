@@ -9,7 +9,8 @@ import SwiftUI
 
 struct AlbumView: View {
     @State private var isAddCardSheetPresented = false
-    @State private var showAlert = false
+    @State private var showQuizAlert = false
+    @State private var showDeleteAlert = false
     @State private var isQuizActivated = false
     @ObservedObject var manager: FlashcardManager
     var albumId: UUID
@@ -73,12 +74,12 @@ struct AlbumView: View {
                     )
                 } else {
                     Button(action: {
-                        showAlert = true
+                        showQuizAlert = true
                     }) {
                         Text("Quiz Me")
                             .foregroundColor(themeManager.isDarkMode ? .white : .black) // Button text color
                     }
-                    .alert(isPresented: $showAlert) {
+                    .alert(isPresented: $showQuizAlert) {
                         Alert(
                             title: Text("No Flashcards"),
                             message: Text("You cannot run a quiz. There are no flashcards in this album.")
@@ -96,12 +97,12 @@ struct AlbumView: View {
                     )
                 } else {
                     Button(action: {
-                        showAlert = true
+                        showQuizAlert = true
                     }) {
                         Text("Start Timer Review")
                             .foregroundColor(themeManager.isDarkMode ? .white : .black) // Button text color
                     }
-                    .alert(isPresented: $showAlert) {
+                    .alert(isPresented: $showQuizAlert) {
                         Alert(
                             title: Text("No Flashcards"),
                             message: Text("You cannot start the timer review. There are no flashcards in this album.")
@@ -113,12 +114,12 @@ struct AlbumView: View {
                 
                 // Delete Album Button
                 Button(action: {
-                    showAlert = true
+                    showDeleteAlert = true
                 }) {
                     Text("Delete Album")
                         .foregroundColor(.red) // Delete button is always red
                 }
-                .alert(isPresented: $showAlert) {
+                .alert(isPresented: $showDeleteAlert) {
                     Alert(
                         title: Text("Delete Album"),
                         message: Text("Are you sure you want to delete this album?"),
@@ -147,3 +148,4 @@ struct AlbumView: View {
         }
     }
 }
+
