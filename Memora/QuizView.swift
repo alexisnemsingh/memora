@@ -95,7 +95,18 @@ struct QuizView: View {
             .sheet(isPresented: $showAnswerSheet) {
                 // Answer Submission Action
                 VStack {
-                    Text("Correct Answer:" + cardData.answer)
+                    if answerText == cardData.answer {
+                        Text("Correct!")
+                            .font(.largeTitle)
+                            .padding(.top, 50)
+                            .foregroundColor(.green)
+                    } else {
+                        Text("Wrong!")
+                            .font(.largeTitle)
+                            .padding(.top, 50)
+                            .foregroundColor(.red)
+                    }
+                    Text("Correct Answer: " + cardData.answer)
                         .font(.headline)
                         .padding()
                     Button("Flip to Back") {
