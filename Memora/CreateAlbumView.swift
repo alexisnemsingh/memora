@@ -34,7 +34,7 @@ struct CreateAlbumView: View {
                         dismiss()
                     }
                     .buttonStyle(.borderedProminent)
-                    .tint(themeManager.isDarkMode ? Color.black.opacity(0.2) : Color.blue)
+                    .tint(themeManager.isDarkMode ? Color.black.opacity(0.2) : Color.blue.opacity(0.2))
                     .disabled(albumTitle.isEmpty)
                 }
                 .padding()
