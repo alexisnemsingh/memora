@@ -93,38 +93,45 @@ struct FlashcardReviewView: View {
             if !currentFlashcards.isEmpty {
                 let currentCard = currentFlashcards[currentCardIndex]
                 
-                VStack {
-                    // Front of Card
-                    if !isCardFlipped {
-                        Text(currentCard.question)
-                            .font(.title)
-                            .padding()
+                GeometryReader { geometry in
+                    VStack {
+                        // Front of Card
+                        if !isCardFlipped {
+                            Text(currentCard.question)
+                                .font(.title)
+                                .padding()
+                                .frame(width: geometry.size.width * 0.9) // Make card width 90% of the available space
+                        }
+                        // Back of Card
+                        else {
+                            Text(currentCard.answer)
+                                .font(.title)
+                                .padding()
+                                .frame(width: geometry.size.width * 0.9)
+                        }
+                        
+                        // Card Image (if exists)
+                        if let imageData = isCardFlipped ? currentCard.backImage : currentCard.frontImage,
+                           let uiImage = UIImage(data: imageData) {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: geometry.size.width * 0.9, height: 200)
+                                .cornerRadius(10)
+                        }
                     }
-                    // Back of Card
-                    else {
-                        Text(currentCard.answer)
-                            .font(.title)
-                            .padding()
-                    }
-                    
-                    // Card Image (if exists)
-                    if let imageData = isCardFlipped ? currentCard.backImage : currentCard.frontImage,
-                       let uiImage = UIImage(data: imageData) {
-                        Image(uiImage: uiImage)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(height: 200)
-                            .cornerRadius(10)
+                    .frame(width: geometry.size.width * 0.9)
+                    .padding()
+                    .background(Color.gray.opacity(0.1))
+                    .cornerRadius(15)
+                    .onTapGesture {
+                        withAnimation {
+                            isCardFlipped.toggle()
+                        }
                     }
                 }
-                .frame(minHeight: 300)
-                .background(Color.gray.opacity(0.1))
-                .cornerRadius(15)
-                .onTapGesture {
-                    withAnimation {
-                        isCardFlipped.toggle()
-                    }
-                }
+                .frame(height: 350) // Set a height for the GeometryReader
+                .padding()
                 
                 // Navigation Buttons
                 HStack {
