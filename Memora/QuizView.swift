@@ -61,16 +61,25 @@ struct QuizView: View {
                         sideText: cardData.answer,
                         sideImage: cardData.backImage
                     )
-                    VStack {
-                        Spacer()
-                        NavigationLink("Next Question", destination: {
-                            QuizView(
-                                manager: manager,
-                                albumId: albumId,
-                                cardId: (cardId + 1) % count, // Wrap-around for cards
-                                count: count
-                            )
-                        }).padding()
+                    if cardId != count - 1 {
+                        VStack {
+                            Spacer()
+                            NavigationLink("Next Question", destination: {
+                                QuizView(
+                                    manager: manager,
+                                    albumId: albumId,
+                                    cardId: (cardId + 1) % count, // Wrap-around for cards
+                                    count: count
+                                )
+                            }).padding()
+                        }
+                    } else {
+                        VStack {
+                            Spacer()
+                            NavigationLink("Return Home", destination: {
+                                AlbumView(manager: manager, albumId: albumId)
+                            }).padding()
+                        }
                     }
                 }
             }
