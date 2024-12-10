@@ -56,7 +56,28 @@ struct AlbumView: View {
                 Spacer()
                 
                 if (manager.albums.first { $0.id == albumId }?.flashcards != nil && manager.albums.first { $0.id == albumId }?.flashcards.count != 0) {
-                    NavigationLink("Quiz Me!", destination: QuizView(manager: manager, albumId: albumId, cardId: 0, count: manager.albums.first { $0.id == albumId }!.flashcards.count))
+                    NavigationLink(
+                        "Quiz Me!",
+                        destination:
+                            QuizView(
+                                manager: manager,
+                                albumId: albumId,
+                                cardId: 0,
+                                count: manager.albums.first { $0.id == albumId }!.flashcards.count)
+                    )
+                } else {
+                    Button(action: {
+                        showAlert = true
+                    }) {
+                        Text("Quiz Me")
+                            .foregroundColor(.black)
+                    }
+                    .alert(isPresented: $showAlert) {
+                        Alert(
+                            title: Text("No Flashcards"),
+                            message: Text("You cannot run a quiz. There are flashcards in this album.")
+                        )
+                    }
                 }
                 
                 Spacer()
