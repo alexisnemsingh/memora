@@ -21,7 +21,7 @@ struct InfoView: View {
                 .foregroundColor(.gray)
                 .padding(.bottom)
 
-            Text("Alexis, Angel, Brandy, and Bryant")
+            Text("Alexis, Angel, Brandy, Bryant, and Alec")
                 .font(.title)
                 .fontWeight(.semibold)
                 .padding(.bottom, 20)
