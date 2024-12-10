@@ -24,16 +24,17 @@ struct InfoView: View {
                         .foregroundColor(themeManager.isDarkMode ? .white : .black)
                         .padding()
 
+
                     Text("This application was created by:")
                         .font(.title3)
                         .foregroundColor(themeManager.isDarkMode ? .gray : .gray.opacity(0.7))
                         .padding(.bottom)
 
-                    Text("Alexis, Angel, Brandy, Bryant, and fill in the blank")
-                        .font(.title)
-                        .fontWeight(.semibold)
-                        .foregroundColor(themeManager.isDarkMode ? .white : .black)
-                        .padding(.bottom, 20)
+                Text("Alexis, Angel, Brandy, Bryant, and Alec")
+                .font(.title)
+                .fontWeight(.semibold)
+                .padding(.bottom, 20)
+
 
                     Text("We hope you enjoy using Memora to manage your flashcards and learn effectively!")
                         .font(.body)
