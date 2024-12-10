@@ -35,7 +35,21 @@ struct AlbumView: View {
                 .font(.title2)
                 .padding(.top, 10)
             
-            
+            NavigationLink(destination: FlashcardReviewView(manager: manager, albumId: albumId))
+            {
+                HStack {
+                    Image(systemName: "clock")
+                        .resizable()
+                        .frame(width: 20, height: 20)
+                    Text("Start Timed Review")
+                }
+                .padding()
+                .background(Color.green)
+                .foregroundColor(.white)
+                .cornerRadius(10)
+            }
+            .disabled(manager.albums.first { $0.id == albumId }?.flashcards.isEmpty ?? true)
+            .padding(.bottom)
             
             List {
                 ForEach(manager.albums.first { $0.id == albumId }?.flashcards ?? []) { flashcard in
